@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: www-app
+  labels:
+    www-component: app
+spec:
+  replicas: 1
+  selector:
+    www-component: app
+  template:
+    metadata:
+      labels:
+        www-component: app
+    spec:
+      containers:
+      - name: www-app
+        image: richarvey/nginx-php-fpm:latest 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: "/var/www/html"
+          name: webroot
+      volumes:
+      - name: webroot
+        persistentVolumeClaim:
+          claimName: efs-pvc

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-app
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: k8s-app
+    spec:
+      containers:
+      - name: k8s-app
+        image: 230367374156.dkr.ecr.ap-southeast-2.amazonaws.com/ecr-k8s-app:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: k8s-pvc
+          mountPath: "/App/Data"
+      volumes:
+      - name: k8s-pvc
+        persistentVolumeClaim:
+          claimName: k8s-pvc
